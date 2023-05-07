@@ -1,5 +1,7 @@
 pipeline {
     agent any
+    environment {
+    ip = '172.31.2.173'
 
     stages{
         stage ('Maven') {
@@ -10,9 +12,9 @@ pipeline {
         stage ('Tomcat') {
             steps {
              sshagent(credentials: ['login']) {
-                 sh 'scp -o StrictHostKeyChecking=no target/*.war ec2-user@172.31.3.79:/opt/tomcat/webapps/'
-                    sh 'ssh ec2-user@172.31.3.79 /opt/tomcat/bin/shutdown.sh'
-                    sh 'ssh ec2-user@172.31.3.79 /opt/tomcat/bin/startup.sh'
+                 sh 'scp -o StrictHostKeyChecking=no target/*.war ec2-user@$ip:/opt/tomcat/webapps/'
+                    sh 'ssh ec2-user@$ip /opt/tomcat/bin/shutdown.sh'
+                    sh 'ssh ec2-user@$ip /opt/tomcat/bin/startup.sh'
              }
         }
     }
